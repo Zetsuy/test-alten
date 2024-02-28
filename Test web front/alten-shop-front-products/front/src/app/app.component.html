@@ -3,10 +3,12 @@
   [class.sidenav-expanded]="getExpanded"
   [class.sidenav-pinned]="getPinned">
   <app-sidenav></app-sidenav>
-  <div class="app-header">
-    <app-breadcrumb></app-breadcrumb>
-  </div>
-  <router-outlet></router-outlet>
+    <div class="app-header">
+      <app-breadcrumb></app-breadcrumb>
+    </div>
+    <div class="app-body">
+      <router-outlet></router-outlet>
+    </div>
 </div>
 
 <p-toast position="bottom-center"></p-toast>
