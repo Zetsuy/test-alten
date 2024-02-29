@@ -6,6 +6,8 @@ import { TableModule } from 'primeng/table';
 import { ToolbarModule  } from 'primeng/toolbar';
 import { ButtonModule } from 'primeng/button';
 import { FormsModule } from "@angular/forms"; 
+import { DialogModule } from 'primeng/dialog';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 
 
@@ -19,7 +21,9 @@ import { FormsModule } from "@angular/forms";
     TableModule,
     ToolbarModule,
     ButtonModule,
-    FormsModule
+    FormsModule,
+    DialogModule,
+    ConfirmDialogModule
   ]
 })
 export class ProductModule { }

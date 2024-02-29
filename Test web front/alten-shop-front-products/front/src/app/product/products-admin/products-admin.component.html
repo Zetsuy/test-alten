@@ -1,7 +1,7 @@
 <p-toolbar styleClass="mb-4 gap-2">
     <ng-template pTemplate="left">
-        <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2" ></button>
-        <button pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger" [disabled]="!selectedProducts || !selectedProducts.length"></button>
+        <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
+            <button pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedProducts()" [disabled]="!selectedProducts || !selectedProducts.length"></button>
     </ng-template>
 
     <ng-template pTemplate="right">
@@ -36,36 +36,66 @@
             <td>
                 <p-tableCheckbox [value]="product"></p-tableCheckbox>
             </td>
-            <td>
-                <p-cellEditor>
-                    <ng-template pTemplate="input">
-                        <input pInputText type="text" [(ngModel)]="product.code">
-                    </ng-template>
-                    <ng-template pTemplate="output">
-                        {{product.code}}
-                    </ng-template>
-                </p-cellEditor>
-            </td>
-            <td>
-                <p-cellEditor>
-                    <ng-template pTemplate="input">
-                        <input pInputText type="text" [(ngModel)]="product.name">
-                    </ng-template>
-                    <ng-template pTemplate="output">
-                        {{product.name}}
-                    </ng-template>
-                </p-cellEditor>
-            </td>
+            <td>{{ product.code }}</td>
+            <td>{{ product.name }}</td>
             <td>
                 <div class="flex align-items-center justify-content-center gap-2">
-                    <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil" (click)="onRowEditInit(product)" class="p-button-rounded p-button-text"></button>
-                    <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check" (click)="onRowEditSave(product)" class="p-button-rounded p-button-text p-button-success mr-2"></button>
-                    <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times" (click)="onRowEditCancel(product, ri)" class="p-button-rounded p-button-text p-button-danger"></button>
-                    <button pButton pRipple icon="pi pi-trash" (click)="deleteProduct(product)" style="color : red;" class="p-button-rounded p-button-text"></button>
+                    <button pButton pRipple icon="pi pi-pencil" (click)="editProduct(product)" class="p-button-rounded p-button-text"></button>
+                    <button pButton pRipple icon="pi pi-trash" style="color : red;" class="p-button-rounded p-button-text" (click)="deleteProduct(product)"></button>
                 </div>
             </td>
         </tr>
     </ng-template>
     
 </p-table>
+
+<p-dialog [(visible)]="productDialog" [style]="{ width: '450px' }" header="Product Details" [modal]="true" styleClass="p-fluid">
+    <ng-template pTemplate="content">
+        <div class="field">
+            <label for="name">Code</label>
+            <input type="text" pInputText id="name" [(ngModel)]="product.code" required autofocus />
+            <small class="p-error" *ngIf="submitted && !product.code">Name is required.</small>
+        </div>
+        <div class="field">
+            <label for="name">Name</label>
+            <input type="text" pInputText id="name" [(ngModel)]="product.name" required autofocus />
+            <small class="p-error" *ngIf="submitted && !product.name">Name is required.</small>
+        </div>
+        <div class="field">
+            <label for="description">Description</label>
+            <textarea id="description" pInputTextarea [(ngModel)]="product.description" required rows="3" cols="20"></textarea>
+        </div>
+        <div class="field">
+            <label for="description">Price</label>
+            <input type="text" pInputText id="price" [(ngModel)]="product.price" required autofocus />
+        </div>
+        <div class="field">
+            <label for="description">Quantity</label>
+            <input type="text" pInputText id="price" [(ngModel)]="product.quantity" required autofocus />
+        </div>
+        <div class="field">
+            <label for="description">Inventory Status</label>
+            <input type="text" pInputText id="price" [(ngModel)]="product.inventoryStatus" required autofocus />
+        </div>
+        <div class="field">
+            <label for="description">Category</label>
+            <input type="text" pInputText id="price" [(ngModel)]="product.category" required autofocus />
+        </div>
+        <div class="field">
+            <label for="description">Image</label>
+            <input type="text" pInputText id="price" [(ngModel)]="product.image" required autofocus />
+        </div>
+        <div class="field">
+            <label for="description">Rating</label>
+            <input type="text" pInputText id="price" [(ngModel)]="product.rating" required autofocus />
+        </div>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+        <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveProduct()"></button>
+    </ng-template>
+</p-dialog>
+
+<p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>
   
