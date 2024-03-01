@@ -10,7 +10,7 @@
 </p-toolbar>
 
 
-<p-table #dt1 [value]="productsList" [(selection)]="selectedProducts" dataKey="code" [rows]="10" [rowsPerPageOptions]="[10, 25, 50]" [paginator]="true"  [rowHover]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [showCurrentPageReport]="true" [tableStyle]="{'min-width': '50rem'}">
+<p-table #dt1 [value]="productsList" [(selection)]="selectedProducts" dataKey="code" [rows]="10" [rowsPerPageOptions]="[10, 25, 50]" [paginator]="true"  [rowHover]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [showCurrentPageReport]="true"  [tableStyle]="{'min-width': '50rem'} " styleClass="p-datatable-gridlines">
        <ng-template pTemplate="header">
         <tr>
             <th style="width: 2%">
