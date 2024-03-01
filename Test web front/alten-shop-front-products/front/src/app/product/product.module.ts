@@ -8,7 +8,12 @@ import { ButtonModule } from 'primeng/button';
 import { FormsModule } from "@angular/forms"; 
 import { DialogModule } from 'primeng/dialog';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-
+import { DataViewModule } from 'primeng/dataview';
+import { TagModule } from 'primeng/tag';
+import { RatingModule } from 'primeng/rating';
+import {DropdownModule} from 'primeng/dropdown';
+import {PanelModule} from 'primeng/panel';
+import {InputTextModule} from 'primeng/inputtext';
 
 
 @NgModule({
@@ -23,7 +28,13 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
     ButtonModule,
     FormsModule,
     DialogModule,
-    ConfirmDialogModule
+    ConfirmDialogModule,
+    DataViewModule,
+    TagModule,
+    RatingModule,
+    DropdownModule,
+    PanelModule,
+    InputTextModule,
   ]
 })
 export class ProductModule { }
