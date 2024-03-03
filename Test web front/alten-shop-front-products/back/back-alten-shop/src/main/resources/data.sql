@@ -1,4 +1,19 @@
-INSERT INTO products (id, code, name, description, image, price, category, quantity, inventoryStatus, rating) VALUES
+DROP TABLE IF EXISTS products;
+
+CREATE TABLE IF NOT EXISTS products (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    code VARCHAR(255),
+    name VARCHAR(255),
+    description VARCHAR(255),
+    image VARCHAR(255),
+    price DOUBLE NOT NULL,
+    category VARCHAR(255),
+    quantity INT NOT NULL,
+    inventory_status VARCHAR(255),
+    rating DOUBLE
+);
+
+INSERT INTO products (id, code, name, description, image, price, category, quantity, inventory_status, rating) VALUES
 (1000, 'f230fh0g3', 'Bamboo Watch', 'Product Description', 'bamboo-watch.jpg', 65, 'Accessories', 24, 'INSTOCK', 5),
 (1001, 'nvklal433', 'Black Watch', 'Product Description', 'black-watch.jpg', 72, 'Accessories', 61, 'INSTOCK', 4),
 (1002, 'zz21cz3c1', 'Blue Band', 'Product Description', 'blue-band.jpg', 79, 'Fitness', 2, 'LOWSTOCK', 3),
