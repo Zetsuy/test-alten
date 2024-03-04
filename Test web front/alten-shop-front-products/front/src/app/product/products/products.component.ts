@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Product } from '../interfaces/product';
 import {SelectItem} from 'primeng/api';
 import { PrimeNGConfig } from 'primeng/api';
+import { ProductService } from '../services/product.service';
 
 @Component({
   selector: 'app-products',
@@ -23,7 +24,7 @@ export class ProductsComponent implements OnInit {
 
     sortKey: string = '';
 
-  constructor(private http: HttpClient,private primengConfig: PrimeNGConfig) { }
+  constructor(private productService: ProductService, private http: HttpClient,private primengConfig: PrimeNGConfig) { }
 
   ngOnInit(): void {
     this.loadProducts();
@@ -41,10 +42,15 @@ export class ProductsComponent implements OnInit {
   }
 
   loadProducts() {
-    this.http.get<any>('../../../../assets/products.json').subscribe(response => {
-      this.productsList = response.data.slice(0,12);
-      console.log(this.productsList);
-    });
+    this.productService.getAllProducts().subscribe(
+      (products: Product[]) => {
+        this.productsList = products;
+        console.log(this.productsList)
+      },
+      (error) => {
+        console.error('Error loading products:', error);
+      }
+    );
   }
 
   onSortChange(event) {
