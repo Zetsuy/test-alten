@@ -1,6 +1,6 @@
 # Base de données
 
-Installation de MySQL
+Installation de MySQL : **https://dev.mysql.com/downloads/installer/**
 
 Creation de la database avec : **CREATE DATABASE altenbackbdd**
 
