@@ -29,7 +29,6 @@ export class ProductsAdminComponent implements OnInit {
     this.productService.getAllProducts().subscribe(
       (products: Product[]) => {
         this.productsList = products;
-        console.log(this.productsList)
       },
       (error) => {
         console.error('Error loading products:', error);
