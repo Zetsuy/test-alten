@@ -55,6 +55,37 @@ INSERT INTO product (id, code, name, description, image, price, category, quanti
 (1028, 'tx125ck42', 'Yoga Mat', 'Product Description', 'yoga-mat.jpg', 20, 'Fitness', 15, 'INSTOCK', 5),
 (1029, 'gwuby345v', 'Yoga Set', 'Product Description', 'yoga-set.jpg', 20, 'Fitness', 25, 'INSTOCK', 8);
 
+# Tests postman
+
+Voici quelques tests réalisés via postman : 
+
+**Récupération des produits :**
+
+![getAll](front/doc/getAll.png)
+
+**Création d'un produit :**
+
+![createProduct](front/doc/createProduct.png)
+
+![createProductTest](front/doc/createProductTest.png)
+
+**Mise à jour d'un produit :**
+
+![updateProduct](front/doc/updateProduct.png)
+
+![updateProductTest](front/doc/updateProductTest.png)
+
+**Suppression d'un produit :**
+
+![deleteProduct](front/doc/deleteProduct.png)
+
+![deleteProductTest](front/doc/deleteProductTest.png)
+
+
+
+
+
+
 
 # Front-end
 
