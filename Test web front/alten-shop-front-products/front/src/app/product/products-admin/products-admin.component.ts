@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Product } from '../interfaces/product';
-import { HttpClient } from '@angular/common/http';
-import { MessageService, SelectItem, ConfirmationService } from 'primeng/api';
+import { MessageService, ConfirmationService } from 'primeng/api';
 import { ProductService } from '../services/product.service';
+import { HttpClient } from '@angular/common/http';
+
 
 @Component({
   selector: 'app-products-admin',
@@ -13,106 +14,121 @@ import { ProductService } from '../services/product.service';
 export class ProductsAdminComponent implements OnInit {
 
   productDialog: boolean = false;
-
-  productsList: Product[];
-
-  selectedProducts!: Product[] | null;
-
-  product!: Product;
-
+  productsList: Product[] = [];
+  selectedProducts: Product[] = [];
+  product: Product = {};
   submitted: boolean = false;
 
-  constructor(private http: HttpClient,private confirmationService: ConfirmationService,private productService: ProductService, private messageService: MessageService) { }
+  constructor(private productService: ProductService, private messageService: MessageService, private confirmationService: ConfirmationService,private http: HttpClient) { }
 
   ngOnInit(): void {
     this.loadProducts();
   }
 
   loadProducts() {
-    this.http.get<any>('../../../../assets/products.json').subscribe(response => {
-      this.productsList = response.data;
-    });
+    this.productService.getAllProducts().subscribe(
+      (products: Product[]) => {
+        this.productsList = products;
+        console.log(this.productsList)
+      },
+      (error) => {
+        console.error('Error loading products:', error);
+      }
+    );
   }
 
   openNew() {
     this.product = {};
     this.submitted = false;
     this.productDialog = true;
-}
+  }
 
-deleteSelectedProducts() {
+  deleteSelectedProducts() {
     this.confirmationService.confirm({
-        message: 'Are you sure you want to delete the selected products?',
-        header: 'Confirm',
-        icon: 'pi pi-exclamation-triangle',
-        accept: () => {
-            this.productsList = this.productsList.filter((val) => !this.selectedProducts?.includes(val));
-            this.selectedProducts = null;
-            this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Products Deleted', life: 3000 });
-        }
+      message: 'Are you sure you want to delete the selected products?',
+      header: 'Confirm',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.selectedProducts?.forEach(product => {
+          this.productService.deleteProduct(product.id).subscribe(
+            () => {
+              this.productsList = this.productsList.filter((val) => val.id !== product.id);
+              this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Deleted', life: 3000 });
+            },
+            (error) => {
+              console.error('Error deleting product:', error);
+              this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error deleting product', life: 3000 });
+            }
+          );
+        });
+        this.selectedProducts = null;
+      }
     });
-}
+  }
+  
 
-editProduct(product: Product) {
+  editProduct(product: Product) {
     this.product = { ...product };
     this.productDialog = true;
-}
+  }
 
-deleteProduct(product: Product) {
+  deleteProduct(product: Product) {
     this.confirmationService.confirm({
-        message: 'Are you sure you want to delete ' + product.name + '?',
-        header: 'Confirm',
-        icon: 'pi pi-exclamation-triangle',
-        accept: () => {
-            this.productsList = this.productsList.filter((val) => val.id !== product.id);
+      message: 'Are you sure you want to delete ' + product.name + '?',
+      header: 'Confirm',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.productService.deleteProduct(product.id).subscribe(
+          () => {
+            this.productsList = this.productsList.filter(p => p.id !== product.id);
             this.product = {};
             this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Deleted', life: 3000 });
-        }
+          },
+          (error) => {
+            console.error('Error deleting product:', error);
+          }
+        );
+      }
     });
   }
 
-
-    hideDialog() {
-      this.productDialog = false;
-      this.submitted = false;
+  hideDialog() {
+    this.productDialog = false;
+    this.submitted = false;
   }
 
   saveProduct() {
-      this.submitted = true;
+    this.submitted = true;
 
-      if (this.product.name?.trim()) {
-          if (this.product.id) {
-              this.productsList[this.findIndexById(this.product.id)] = this.product;
-              this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Updated', life: 3000 });
-          } else {
-              this.product.id = this.createId();
-              this.product.image = 'product-placeholder.svg';
-              this.productsList.push(this.product);
-              this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Created', life: 3000 });
+    if (this.product.name?.trim()) {
+      if (this.product.id) {
+        this.productService.updateProduct(this.product.id, this.product).subscribe(
+          () => {
+            const index = this.productsList.findIndex(p => p.id === this.product.id);
+            if (index !== -1) {
+              this.productsList[index] = this.product;
+            }
+            this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Updated', life: 3000 });
+          },
+          (error) => {
+            console.error('Error updating product:', error);
           }
-
-          this.productsList = [...this.productsList];
-          this.productDialog = false;
-          this.product = {};
-      }
-  }
-
-  findIndexById(id: number): number {
-      let index = -1;
-      for (let i = 0; i < this.productsList.length; i++) {
-          if (this.productsList[i].id === id) {
-              index = i;
-              break;
+        );
+      } else {
+        this.productService.createProduct(this.product).subscribe(
+          () => {
+            this.productsList.push(this.product);
+            this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Created', life: 3000 });
+          },
+          (error) => {
+            console.error('Error creating product:', error);
           }
+        );
       }
 
-      return index;
+      this.productDialog = false;
+      this.product = {};
+    }
   }
-
-  createId(): number {
-    return Math.floor(Math.random() * 100000);
-  }
-
-
 
 }
